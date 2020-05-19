@@ -67,8 +67,10 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Controls\BaseCell.cs" />
+    <Compile Include="Controls\CellBase.cs" />
     <Compile Include="Controls\Cell.cs" />
+    <Compile Include="Controls\Mine.cs" />
+    <Compile Include="Controls\MineBase.cs" />
     <Compile Include="Controls\MineField.cs" />
     <Compile Include="Controls\WindowSettings.xaml.cs">
       <DependentUpon>WindowSettings.xaml</DependentUpon>
@@ -78,6 +80,7 @@
     <Compile Include="Data\CellType.cs" />
     <Compile Include="Data\Command.cs" />
     <Compile Include="Data\GameSettings.cs" />
+    <Compile Include="Data\MineType.cs" />
     <Compile Include="Data\Utils.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>

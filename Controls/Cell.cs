@@ -9,7 +9,7 @@ namespace WPF_Miner.Controls
     /// <summary>
     /// Represents every cell on the game field.
     /// </summary>
-    public class Cell : BaseCell
+    public class Cell : CellBase
     {        
         private CellStatus cellStatus;
         public Cell(int _columnNumber, int _rowNumber)
@@ -20,6 +20,8 @@ namespace WPF_Miner.Controls
             this.RowNumber = _rowNumber;
             //By default all cells are buttons
             this.Status = CellStatus.Button;
+            //Assign a mine to yhe cell
+            this.Mine = new Mine();
         }
 
         //image size in pixels
@@ -41,8 +43,8 @@ namespace WPF_Miner.Controls
             if (this.Status == CellStatus.Opened)
             {
                 if (this.Type == CellType.Empty) { this.Content = new Image() { Source = new BitmapImage(Utils.EmptyUri) }; return; }
-                if (this.Type == CellType.Bomb) { this.Content = new Image() { Source = new BitmapImage(Utils.BombUri) }; return; }
-                if (this.Type == CellType.BombExplode) { this.Content = new Image() { Source = new BitmapImage(Utils.BombExplodeUri) }; return; }
+                if (this.Type == CellType.Bomb) { this.Content = this.Mine.MineImage; return; }
+                if (this.Type == CellType.BombExplode) { this.Content = this.Mine.MineImageExploded; return; }
                 if (this.Type == CellType.BombError) { this.Content = new Image() { Source = new BitmapImage(Utils.BombErrorUri) }; return; }
                 if (this.Type == CellType.Near1) { this.Content = new Image() { Source = new BitmapImage(Utils.B1Uri) }; return; }
                 if (this.Type == CellType.Near2) { this.Content = new Image() { Source = new BitmapImage(Utils.B2Uri) }; return; }

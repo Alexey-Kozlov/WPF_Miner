@@ -7,7 +7,7 @@ namespace WPF_Miner.Controls
     /// <summary>
     /// Class factory for cells
     /// </summary>
-    public abstract class BaseCell : ContentControl
+    public abstract class CellBase : ContentControl
     {
         //Cell status, needs to override because of custom logic
         public abstract CellStatus Status { get; set; }
@@ -16,5 +16,7 @@ namespace WPF_Miner.Controls
         public int RowNumber { get; set; }
         //Cell size, need to override for size can change
         public abstract int DefaultCellSize { get; }
+        //
+        public MineBase Mine { get; set; }
     }
 }

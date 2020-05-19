@@ -4,6 +4,7 @@ using System.Windows.Input;
 using WPF_Miner.Data;
 using System.Windows;
 using System.Windows.Media.Imaging;
+using System.Threading;
 
 namespace WPF_Miner.Controls
 {
@@ -21,6 +22,9 @@ namespace WPF_Miner.Controls
         private TextBlock BombsLeft;
         //Initialize current settings of the game
         private GameSettings gameSettings = GameSettings.Instance();
+        private System.Threading.Timer Timer;
+        private AutoResetEvent autoEvent = new AutoResetEvent(false);
+        private int SecondsPast = 0;
 
         //Mouse events
         private DelegateCommand LeftButtonClickCommand { get; }
@@ -37,6 +41,8 @@ namespace WPF_Miner.Controls
             if(gameSettings.BombAmount == 0) gameSettings.BombAmount = DefaultBombsAmount;
             if (gameSettings.GameFieldSizeColumns == 0) gameSettings.GameFieldSizeColumns = DefaultXSize;
             if (gameSettings.GameFiledSizeRows == 0) gameSettings.GameFiledSizeRows = DefaultYSize;
+            //Create timer for future work
+            Timer = new Timer(TimerTick, autoEvent, 0, 1000);
             CreateNewField();
         }
 
@@ -47,7 +53,7 @@ namespace WPF_Miner.Controls
 
         //Create new mine field.
         private void CreateNewField()
-        {
+        {            
             ClearData();
             Cells = new Cell[FieldGameSettings.GameFieldSizeColumns, FieldGameSettings.GameFiledSizeRows];
             //Create rows and columns of the grid
@@ -84,6 +90,7 @@ namespace WPF_Miner.Controls
             //Default settings for face-image and Counter of bombs
             Face.Source = new BitmapImage(Utils.FaceUri);
             BombsLeft.Text = FieldGameSettings.BombAmount.ToString();
+            SecondsPast = 0;
         }
 
         private void ClearData()
@@ -210,7 +217,13 @@ namespace WPF_Miner.Controls
                  Face.Source = new BitmapImage(Utils.FaceSadUri);
              });
             MessageBox.Show("You have lost... Try another time!");
-        }        
+        }      
+        
+        private void TimerTick(Object stateInfo)
+        {
+            //For the future - seconds counter.
+            SecondsPast++;
+        }
     }
 
 
