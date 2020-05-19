@@ -17,7 +17,7 @@ using WPF_Miner.Controls;
 namespace WPF_Miner
 {
     /// <summary>
-    /// Логика взаимодействия для MainWindow.xaml
+    /// MainWindow
     /// </summary>
     public partial class MainWindow : Window
     {
@@ -26,12 +26,14 @@ namespace WPF_Miner
             InitializeComponent();
         }
 
+        //Click menu item for starting new game
         private void MenuNewGame_Click(object sender, RoutedEventArgs e)
         {
             MineField field = (MineField)Application.Current.MainWindow.FindName("MineField");
             field.StartNewGame();
         }
 
+        //Click menu item for opening settings window
         private void MenuSettings_Click(object sender, RoutedEventArgs e)
         {
             WindowSettings windowSettings = new WindowSettings();

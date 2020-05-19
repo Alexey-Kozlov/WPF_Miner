@@ -3,6 +3,9 @@ using System.Windows.Input;
 
 namespace WPF_Miner.Data
 {
+    /// <summary>
+    /// Ordinary declaration of command/ Used for mouse event handling
+    /// </summary>
     public class DelegateCommand : ICommand
     {
         private readonly Predicate<object> _canExecute;

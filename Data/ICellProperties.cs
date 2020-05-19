@@ -10,14 +10,14 @@ namespace WPF_Miner.Data
     {
 
         /// <summary>
-        /// Cell X coordinate
+        /// Cell X coordinate - column number
         /// </summary>
-        int X { get; set; }
+        int ColumnNumber { get; set; }
 
         /// <summary>
-        /// Cell Y coordinate
+        /// Cell Y coordinate - row number
         /// </summary>
-        int Y { get; set; }
+        int RowNumber { get; set; }
 
     }
 }

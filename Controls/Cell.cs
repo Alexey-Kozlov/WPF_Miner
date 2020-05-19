@@ -6,21 +6,26 @@ using WPF_Miner.Data;
 
 namespace WPF_Miner.Controls
 {
+    /// <summary>
+    /// Represents every cell on the game field.
+    /// </summary>
     public class Cell : ContentControl, ICellProperties
     {
+        //image size in pixels
         private const int DefaultCellSize = 16;
         private CellStatus cellStatus;
-        public int X { get; set;}
-        public int Y { get; set; }
+        public int ColumnNumber { get; set;}
+        public int RowNumber { get; set; }
         public CellStatus Status { get => cellStatus; set { cellStatus = value; ImageUpdate(); } }
         public CellType Type { get; set; }
 
-        public Cell(int _x, int _y)
+        public Cell(int _columnNumber, int _rowNumber)
         {
             Width = DefaultCellSize;
             Height = DefaultCellSize;
-            this.X = _x;
-            this.Y = _y;
+            this.ColumnNumber = _columnNumber;
+            this.RowNumber = _rowNumber;
+            //By default all cells are buttons
             this.Status = CellStatus.Button;
         }
 
@@ -29,6 +34,7 @@ namespace WPF_Miner.Controls
             base.OnInitialized(e);
         }
 
+        //Set proper images to different types of cells. The trigger is changing status of the cell. It happens after clicking on cell.
         private void ImageUpdate()
         {
             if (this.Status == CellStatus.Button) { this.Content = new Image() { Source = new BitmapImage(Utils.ButtonUri) }; return; }

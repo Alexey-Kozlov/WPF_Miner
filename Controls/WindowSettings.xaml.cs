@@ -13,9 +13,6 @@ using System.Windows.Shapes;
 
 namespace WPF_Miner.Controls
 {
-    /// <summary>
-    /// Логика взаимодействия для WindowSettings.xaml
-    /// </summary>
     public partial class WindowSettings : Window
     {
         private MineField field;
@@ -44,41 +41,57 @@ namespace WPF_Miner.Controls
             BombsAmount.Text = field.FieldGameSettings.BombAmount.ToString();
         }
 
+        //Check for errors
         private bool CheckEnterValues()
         {
-            int newColumns = 0;
-            int newRows = 0;
-            int newBombAmount = 0;
+            int _newColumns = 0;
+            int _newRows = 0;
+            int _newBombAmount = 0;
             //check enter columns
-            if (Int32.TryParse(FieldSizeColumns.Text, out newColumns))
+            if (Int32.TryParse(FieldSizeColumns.Text, out _newColumns))
             {
-                if (newColumns < 0 || newColumns > 100)
+                if (_newColumns < 0 || _newColumns > 100)
                 {
                     MessageBox.Show("Input error. Amount of columns must be between 1 and 100");
                     return false;
                 }
             }
-            //check enter rows
-            if (Int32.TryParse(FieldSizeRows.Text, out newRows))
+            else
             {
-                if (newRows < 0 || newRows > 100)
+                MessageBox.Show("Input error. It must be a number");
+                return false;
+            }
+            //check enter rows
+            if (Int32.TryParse(FieldSizeRows.Text, out _newRows))
+            {
+                if (_newRows < 0 || _newRows > 100)
                 {
                     MessageBox.Show("Input error. Amount of rows must be between 1 and 100");
                     return false;
                 }
             }
-            //check enter bomb amount
-            if (Int32.TryParse(FieldSizeColumns.Text, out newBombAmount))
+            else
             {
-                if (newBombAmount < 0 || newBombAmount > (newColumns * newRows * 0.25))
+                MessageBox.Show("Input error. It must be a number");
+                return false;
+            }
+            //check enter bomb amount
+            if (Int32.TryParse(BombsAmount.Text, out _newBombAmount))
+            {
+                if (_newBombAmount < 0 || _newBombAmount > (_newColumns * _newRows * 0.25))
                 {
                     MessageBox.Show("Input error. Amount of mines must be between 1 and 25% of field cells");
                     return false;
                 }
             }
-            this.NewColumns = newColumns;
-            this.NewRows = newRows;
-            this.NewBombAmount = newBombAmount;
+            else
+            {
+                MessageBox.Show("Input error. It must be a number");
+                return false;
+            }
+            this.NewColumns = _newColumns;
+            this.NewRows = _newRows;
+            this.NewBombAmount = _newBombAmount;
             return true;
         }
     }

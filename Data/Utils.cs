@@ -5,6 +5,12 @@ namespace WPF_Miner.Data
 {
     public static class Utils
     {
+        /// <summary>
+        /// Accessory method for go throw all the cells on gaming field
+        /// </summary>
+        /// <param name="cells">Array of all cells on the game field</param>
+        /// <param name="process">Action to do</param>
+        /// <param name="_bombsAmount">Amount of the bombs</param>
         public static void ForEach(Cell[,] cells, Action<Cell> process)
         {
             for (int i = 0; i < cells.GetLength(0); i++)
@@ -17,6 +23,7 @@ namespace WPF_Miner.Data
             }
         }
 
+        //A pack of static methods for loading images
         public static readonly Uri BombUri = new Uri("pack://application:,,,/Images/bomb.bmp", UriKind.RelativeOrAbsolute);
         public static readonly Uri BombErrorUri = new Uri("pack://application:,,,/Images/bomb_error.bmp", UriKind.RelativeOrAbsolute);
         public static readonly Uri BombExplodeUri = new Uri("pack://application:,,,/Images/bomb_explode.bmp", UriKind.RelativeOrAbsolute);

@@ -7,16 +7,22 @@ using System.Windows.Media.Imaging;
 
 namespace WPF_Miner.Controls
 {
+    /// <summary>
+    /// The main game field. It contains all the cells.
+    /// </summary>
     public class MineField: Grid
     {
+        //By default - it is square 8x8 with 10 mines
         public int DefaultXSize = 8;
         public int DefaultYSize = 8;
         public int DefaultBombsAmount = 10;
         private Cell[,] Cells;
         private Image Face;
         private TextBlock BombsLeft;
+        //Initialize current settings of the game
         private GameSettings gameSettings = GameSettings.Instance();
 
+        //Mouse events
         private DelegateCommand LeftButtonClickCommand { get; }
         private DelegateCommand RightButtonClickCommand { get; }
 
@@ -39,12 +45,12 @@ namespace WPF_Miner.Controls
             CreateNewField();
         }
 
-        //Create new mine field
+        //Create new mine field.
         private void CreateNewField()
         {
             ClearData();
             Cells = new Cell[FieldGameSettings.GameFieldSizeColumns, FieldGameSettings.GameFiledSizeRows];
-            //Create rows and columns
+            //Create rows and columns of the grid
             for (int i = 0; i < FieldGameSettings.GameFieldSizeColumns; i++)
             {
                 RowDefinition definition = new RowDefinition() { Height = GridLength.Auto };
@@ -75,6 +81,7 @@ namespace WPF_Miner.Controls
                     Cells[i, j] = cell;
                 }
             }
+            //Default settings for face-image and Counter of bombs
             Face.Source = new BitmapImage(Utils.FaceUri);
             BombsLeft.Text = FieldGameSettings.BombAmount.ToString();
         }
@@ -96,6 +103,7 @@ namespace WPF_Miner.Controls
             Cells = null;
         }
 
+        //Initialize mouse events - by using custom command
         public void AttachEvents(Cell _cell)
         {
             _cell.InputBindings.Add(new InputBinding(LeftButtonClickCommand, new MouseGesture(MouseAction.LeftClick))
@@ -105,8 +113,10 @@ namespace WPF_Miner.Controls
             _cell.InputBindings.Add(new InputBinding(RightButtonClickCommand, new MouseGesture(MouseAction.RightClick))
             {
                 CommandParameter = _cell
-            }); ;
+            }); 
         }
+
+        //Right button mouse clicked - in common, to set flag
         private void RightButtonClick(object parameter)
         {
             Cell cell = (Cell)parameter;
@@ -133,6 +143,7 @@ namespace WPF_Miner.Controls
             }
         }
 
+        //Left button mouse clicked - main using for opening the cell
         private void LeftButtonClick(object parameter)
         {
 
@@ -151,7 +162,7 @@ namespace WPF_Miner.Controls
                 Calculations.MakeAllEmptyCellAroundOpened(Cells, cell);
             cell.Status = CellStatus.Opened;
 
-
+            //how many cells are opened already
             int _cellsOpenedAmount = 0;
             Utils.ForEach(Cells, _cell =>
             {
@@ -171,6 +182,7 @@ namespace WPF_Miner.Controls
                     }
                 });
                 Face.Source = new BitmapImage(Utils.FaceSmileUri);
+                BombsLeft.Text = "0";
                 MessageBox.Show("You win! Game over.");
             }
         }
@@ -197,6 +209,7 @@ namespace WPF_Miner.Controls
                  cell.Status = CellStatus.Opened;
                  Face.Source = new BitmapImage(Utils.FaceSadUri);
              });
+            MessageBox.Show("You have lost... Try another time!");
         }        
     }
 
