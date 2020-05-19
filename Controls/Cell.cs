@@ -9,16 +9,9 @@ namespace WPF_Miner.Controls
     /// <summary>
     /// Represents every cell on the game field.
     /// </summary>
-    public class Cell : ContentControl, ICellProperties
-    {
-        //image size in pixels
-        private const int DefaultCellSize = 16;
+    public class Cell : BaseCell
+    {        
         private CellStatus cellStatus;
-        public int ColumnNumber { get; set;}
-        public int RowNumber { get; set; }
-        public CellStatus Status { get => cellStatus; set { cellStatus = value; ImageUpdate(); } }
-        public CellType Type { get; set; }
-
         public Cell(int _columnNumber, int _rowNumber)
         {
             Width = DefaultCellSize;
@@ -28,6 +21,11 @@ namespace WPF_Miner.Controls
             //By default all cells are buttons
             this.Status = CellStatus.Button;
         }
+
+        //image size in pixels
+        public override int DefaultCellSize => 16;
+
+        public override CellStatus Status { get => cellStatus; set { cellStatus = value; ImageUpdate(); } }
 
         protected override void OnInitialized(EventArgs e)
         {
