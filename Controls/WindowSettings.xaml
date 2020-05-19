@@ -1,0 +1,28 @@
+﻿<Window x:Class="WPF_Miner.Controls.WindowSettings"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WPF_Miner.Controls"
+        mc:Ignorable="d"
+        Title="WindowSettings" SizeToContent="WidthAndHeight" Loaded="Window_Loaded">
+    <Grid Margin="10">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30"></RowDefinition>
+            <RowDefinition Height="30"></RowDefinition>
+            <RowDefinition Height="30"></RowDefinition>
+            <RowDefinition Height="30"></RowDefinition>
+        </Grid.RowDefinitions>
+        <TextBlock Grid.Column="0" Grid.Row="0" Padding="5">Field size, columns amount</TextBlock>
+        <TextBox Grid.Column="1" Grid.Row="0" Name="FieldSizeColumns" Width="50"></TextBox>
+        <TextBlock Grid.Column="0" Grid.Row="1" Padding="5">Field size, rows amount</TextBlock>
+        <TextBox Grid.Column="1" Grid.Row="1" Name="FieldSizeRows" Width="50"></TextBox>
+        <TextBlock Grid.Column="0" Grid.Row="2" Padding="5" TextWrapping="Wrap">Mines amount. It must be between 1 and 25% of all game cells amount</TextBlock>
+        <TextBox Grid.Column="1" Grid.Row="2" Name="BombsAmount" Width="50"></TextBox>
+        <Button Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="2" Name="SaveSettings" FontSize="16" Width="150" Click="SaveButton_Click">Save settings</Button>
+    </Grid>
+</Window>
