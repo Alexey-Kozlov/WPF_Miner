@@ -104,7 +104,6 @@ namespace WPF_Miner.Data
                 check(x, y + 1),
                 check(x + 1, y + 1),
                 check(x - 1, y),
-                check(x, y),
                 check(x + 1, y),
                 check(x - 1, y - 1),
                 check(x, y - 1),
