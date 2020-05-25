@@ -86,7 +86,7 @@ namespace WPF_Miner.Data
             //in case of cell is bomb
             if (_bombsMap[_cell.ColumnNumber, _cell.RowNumber] == true)
             {
-                _cell.Type = CellType.Bomb;
+                _cell.Type = CellType.Bomb;                
             }
         }
 
@@ -98,7 +98,7 @@ namespace WPF_Miner.Data
         /// <param name="check">function for processing rezults</param>
         private static int GetBombsAround(int x, int y, Func<int, int, bool> check)
         {
-            var bombs = new[]
+            bool[] bombs = new[]
             {                
                 check(x - 1, y + 1),
                 check(x, y + 1),
@@ -109,7 +109,7 @@ namespace WPF_Miner.Data
                 check(x, y - 1),
                 check(x + 1, y - 1),
             };
-            return bombs.Where(isBomb => isBomb).Count();
+            return bombs.Where(p=>p==true).Count();
         }
 
         /// <summary>

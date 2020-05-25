@@ -12,9 +12,7 @@ namespace WPF_Miner.Controls
     {
         public Mine()
         {
-            this.MineType = Data.MineType.Ordinary;
-            this.MineImage = new Image() { Source = new BitmapImage(Utils.BombUri) };
-            this.MineImageExploded = new Image() { Source = new BitmapImage(Utils.BombExplodeUri) };
         }
     }
+    
 }

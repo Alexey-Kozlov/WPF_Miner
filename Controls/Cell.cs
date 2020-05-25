@@ -25,7 +25,7 @@ namespace WPF_Miner.Controls
         }
 
         //image size in pixels
-        public override int DefaultCellSize => 16;
+        public override int DefaultCellSize => 32;
 
         public override CellStatus Status { get => cellStatus; set { cellStatus = value; ImageUpdate(); } }
 

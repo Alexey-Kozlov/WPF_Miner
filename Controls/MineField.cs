@@ -5,25 +5,28 @@ using WPF_Miner.Data;
 using System.Windows;
 using System.Windows.Media.Imaging;
 using System.Threading;
+using System.Threading.Tasks;
+using System.Windows.Controls.Primitives;
 
 namespace WPF_Miner.Controls
 {
     /// <summary>
     /// The main game field. It contains all the cells.
     /// </summary>
-    public class MineField: Grid
+    public class MineField : Grid
     {
         //By default - it is square 8x8 with 10 mines
         public int DefaultXSize = 8;
         public int DefaultYSize = 8;
         public int DefaultBombsAmount = 10;
+        public int DefaultAdvancedBombsAmount = 3;
         private Cell[,] Cells;
         private Image Face;
         private TextBlock BombsLeft;
+        private TextBlock SecPassed;
         //Initialize current settings of the game
         private GameSettings gameSettings = GameSettings.Instance();
-        private System.Threading.Timer Timer;
-        private AutoResetEvent autoEvent = new AutoResetEvent(false);
+        private System.Windows.Threading.DispatcherTimer Timer;
         private int SecondsPast = 0;
 
         //Mouse events
@@ -38,12 +41,23 @@ namespace WPF_Miner.Controls
             RightButtonClickCommand = new DelegateCommand(RightButtonClick);
             Face = (Image)Application.Current.MainWindow.FindName("Face");
             BombsLeft = (TextBlock)Application.Current.MainWindow.FindName("BombsLeft");
-            if(gameSettings.BombAmount == 0) gameSettings.BombAmount = DefaultBombsAmount;
+            SecPassed = (TextBlock)Application.Current.MainWindow.FindName("SecPassed");
+            if (gameSettings.BombAmount == 0) gameSettings.BombAmount = DefaultBombsAmount;
             if (gameSettings.GameFieldSizeColumns == 0) gameSettings.GameFieldSizeColumns = DefaultXSize;
             if (gameSettings.GameFiledSizeRows == 0) gameSettings.GameFiledSizeRows = DefaultYSize;
+            if (gameSettings.AdvancedBombAmount == 0) gameSettings.AdvancedBombAmount = DefaultAdvancedBombsAmount;
             //Create timer for future work
-            Timer = new Timer(TimerTick, autoEvent, 0, 1000);
+            Timer = new System.Windows.Threading.DispatcherTimer();
+            Timer.Interval = new TimeSpan(0, 0, 1);
+            Timer.Tick += Timer_Tick;
+            Timer.Start();
             CreateNewField();
+        }
+
+        private void Timer_Tick(object sender, EventArgs e)
+        {
+            SecondsPast++;
+            SecPassed.Text = SecondsPast.ToString();
         }
 
         public void StartNewGame()
@@ -53,7 +67,7 @@ namespace WPF_Miner.Controls
 
         //Create new mine field.
         private void CreateNewField()
-        {            
+        {
             ClearData();
             Cells = new Cell[FieldGameSettings.GameFieldSizeColumns, FieldGameSettings.GameFiledSizeRows];
             //Create rows and columns of the grid
@@ -76,7 +90,7 @@ namespace WPF_Miner.Controls
             {
                 for (int j = 0; j < FieldGameSettings.GameFiledSizeRows; j++)
                 {
-                    Cell cell = new Cell(i,j);
+                    Cell cell = new Cell(i, j);
                     AttachEvents(cell);
                     //Set proper type to every cell
                     Calculations.SetCellType(bombMap, cell);
@@ -87,10 +101,41 @@ namespace WPF_Miner.Controls
                     Cells[i, j] = cell;
                 }
             }
+
+            SetAdvancedMine();
+
             //Default settings for face-image and Counter of bombs
             Face.Source = new BitmapImage(Utils.FaceUri);
             BombsLeft.Text = FieldGameSettings.BombAmount.ToString();
             SecondsPast = 0;
+        }
+
+        public void SetAdvancedMine()
+        {
+            Random rnd = new Random();
+            for (int i = 0; i < FieldGameSettings.AdvancedBombAmount; i++)
+            {
+                bool isSetted = false;
+                do
+                {
+
+                    Utils.ForEach(Cells, cell =>
+                    {
+                        if (cell.Type == CellType.Bomb &&
+                        cell.Mine is Mine &&
+                        rnd.Next(1, FieldGameSettings.BombAmount) < 4 &&
+                        !isSetted)
+                        {
+                            cell.Mine = new AdvancedMine();
+                            isSetted = true;
+                        }
+                    });
+
+
+                } while (!isSetted);
+
+            }
+
         }
 
         private void ClearData()
@@ -120,7 +165,7 @@ namespace WPF_Miner.Controls
             _cell.InputBindings.Add(new InputBinding(RightButtonClickCommand, new MouseGesture(MouseAction.RightClick))
             {
                 CommandParameter = _cell
-            }); 
+            });
         }
 
         //Right button mouse clicked - in common, to set flag
@@ -160,7 +205,7 @@ namespace WPF_Miner.Controls
             //Burst!
             if (cell.Type == CellType.Bomb)
             {
-                Burst();
+                Burst(cell);
                 return;
             }
 
@@ -190,40 +235,42 @@ namespace WPF_Miner.Controls
                 });
                 Face.Source = new BitmapImage(Utils.FaceSmileUri);
                 BombsLeft.Text = "0";
+                Timer.Stop();
                 MessageBox.Show("You win! Game over.");
             }
         }
 
-        private void Burst()
+        private void Burst(Cell _cell)
         {
+            if (!string.IsNullOrEmpty(_cell.Mine.SoundToPlay))
+            {
+                System.Media.SoundPlayer player = new System.Media.SoundPlayer(_cell.Mine.SoundToPlay);
+                player.Play();
+            }
             //Make all bombs exploded and open all cells
             Utils.ForEach(Cells, cell =>
-             {
-                 if (cell.Type == CellType.Bomb)
-                 {
-                     cell.Type = CellType.BombExplode;
-                 }
-                 else
-                 {
-                     if (cell.Status == CellStatus.Flagged)
-                     {
-                         if (cell.Type != CellType.Bomb)
-                         {
-                             cell.Type = CellType.BombError;
-                         }
-                     }
-                 }
-                 cell.Status = CellStatus.Opened;
-                 Face.Source = new BitmapImage(Utils.FaceSadUri);
-             });
+            {
+                if (cell.Type == CellType.Bomb)
+                {
+                    cell.Type = CellType.BombExplode;
+                }
+                else
+                {
+                    if (cell.Status == CellStatus.Flagged)
+                    {
+                        if (cell.Type != CellType.Bomb)
+                        {
+                            cell.Type = CellType.BombError;
+                        }
+                    }
+                }
+                cell.Status = CellStatus.Opened;
+                Face.Source = new BitmapImage(Utils.FaceSadUri);
+            });
+            Timer.Stop();
             MessageBox.Show("You have lost... Try another time!");
-        }      
-        
-        private void TimerTick(Object stateInfo)
-        {
-            //For the future - seconds counter.
-            SecondsPast++;
         }
+
     }
 
 

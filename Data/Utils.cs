@@ -25,6 +25,7 @@ namespace WPF_Miner.Data
 
         //A pack of static methods for loading images
         public static readonly Uri BombUri = new Uri("pack://application:,,,/Images/bomb.bmp", UriKind.RelativeOrAbsolute);
+        public static readonly Uri AdvancedBombUri = new Uri("pack://application:,,,/Images/AdvancedBomb.bmp", UriKind.RelativeOrAbsolute);
         public static readonly Uri BombErrorUri = new Uri("pack://application:,,,/Images/bomb_error.bmp", UriKind.RelativeOrAbsolute);
         public static readonly Uri BombExplodeUri = new Uri("pack://application:,,,/Images/bomb_explode.bmp", UriKind.RelativeOrAbsolute);
         public static readonly Uri ButtonUri = new Uri("pack://application:,,,/Images/button.bmp", UriKind.RelativeOrAbsolute);
@@ -43,5 +44,13 @@ namespace WPF_Miner.Data
         public static readonly Uri FaceSadUri = new Uri("pack://application:,,,/Images/face_sad.png", UriKind.RelativeOrAbsolute);
         public static readonly Uri FaceUri = new Uri("pack://application:,,,/Images/face.png", UriKind.RelativeOrAbsolute);
 
+    }
+
+    public static class ForEachClass
+    {
+        public static void ForEach(this Cell[,] cells, Action<Cell> process)
+        {
+            Utils.ForEach(cells, process);
+        }
     }
 }

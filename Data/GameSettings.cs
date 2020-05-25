@@ -32,5 +32,9 @@ namespace WPF_Miner.Data
         /// Amount of mines on the game field
         /// </summary>
         public int BombAmount { get; set; }
+        /// <summary>
+        /// Amount of advanced mines on the game field
+        /// </summary>
+        public int AdvancedBombAmount { get; set; }
     }
 }
